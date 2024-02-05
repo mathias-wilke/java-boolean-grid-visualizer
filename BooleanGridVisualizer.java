@@ -12,6 +12,7 @@ public class BooleanGridVisualizer extends JFrame {
     private BooleanGridPanel gridPanel;
     private int cellWidth; // Width of the cells
     private int cellHeight; // Height of the cells
+    private boolean startUp = true;
 
     /**
      * Constructs a BooleanGridVisualizer with specified cell width and height.
@@ -51,8 +52,11 @@ public class BooleanGridVisualizer extends JFrame {
         int totalWidth = cols * cellWidth + 15;
         int totalHeight = rows * cellHeight + 38; // +38 for window frame
         setSize(new Dimension(totalWidth, totalHeight));
-        setLocationRelativeTo(null);
         revalidate();
+        if(startUp) {
+        	setLocationRelativeTo(null);
+        	startUp = false;
+        }
     }
 
     /**
