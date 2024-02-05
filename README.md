@@ -2,6 +2,8 @@
 
 This project provides a simple Java application to visualize Conway's Game of Life, a cellular automaton devised by the British mathematician John Horton Conway in 1970. The application displays the evolution of a grid of cells, each of which can be alive or dead, based on a set of rules that simulate cellular automaton.
 
+![Example1](java-boolean-grid-visualizer-example.png?raw=true)
+
 ## Features
 
 - Visualizes Conway's Game of Life on a grid.
