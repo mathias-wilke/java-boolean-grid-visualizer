@@ -2,7 +2,7 @@ import java.util.Random;
 
 public class StartUp {
 
-	private static RuleSet ruleSet = RuleSet.BELOUSOV_ZHABOTINSKY_REACTION;
+	private static RuleSet ruleSet = RuleSet.CONWAYS_GAME_OF_LIFE;
 	
     public static void main(String[] args) {
         // Initial setup for visualizer and grid
@@ -96,42 +96,20 @@ public class StartUp {
      * @return The number of living neighbors around the cell at [row][col].
      */
     private static short countLivingNeighbors(boolean[][] grid, int row, int col) {
-    	// These variables just allow me to write less characters in the if statements
-    	int lx = grid.length - 1;
-    	int ly = grid[0].length - 1;
-    	
     	short livingNeighbors = 0;
     	
-    	if(row > 0) {
-    		
-    		if(col > 0 && grid[row - 1][col - 1])
-    			livingNeighbors++;
-    		
-    		if(grid[row - 1][col])
-    			livingNeighbors++;
-    		
-    		if(col < ly && grid[row - 1][col + 1])
-    			livingNeighbors++;
-    		
-    	}
+    	if(grid[row][col]) livingNeighbors--;
     	
-    	if(col > 0 && grid[row][col - 1])
-    		livingNeighbors++;
-    	
-    	if(col < ly && grid[row][col + 1])
-    		livingNeighbors++;
-    	
-    	if(row < lx) {
-    		
-    		if(col > 0 && grid[row + 1][col - 1])
-    			livingNeighbors++;
-    		
-    		if(grid[row + 1][col])
-    			livingNeighbors++;
-    		
-    		if(col < ly && grid[row + 1][col + 1])
-    			livingNeighbors++;
-    		
+    	for(int x = 0; x < 3; x++) {
+    		for(int y = 0; y < 3; y++) {
+    			if(row - 1 + x < 1 || row - 1 + x > grid.length - 1) {
+    				continue;
+    			}
+    			if(col - 1 + y < 1 || col - 1 + y > grid[0].length - 1) {
+    				continue;
+    			}
+    			if(grid[row - 1 + x][col - 1 + y]) livingNeighbors++;
+    		}
     	}
     	
         return livingNeighbors;
