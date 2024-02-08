@@ -44,15 +44,14 @@ public class StartUp {
     		for(int y = 0; y < grid[0].length; y++) {
     			
     			short livingNeighbors = countLivingNeighbors(grid, x, y); 
+
+    			boolean newState = grid[x][y];
     			
-    			boolean oldState = grid[x][y];
-    			boolean newState = oldState;
-    			
-    			if(oldState && (livingNeighbors < 2 || livingNeighbors > 3)) {
+    			if(livingNeighbors < 2 || livingNeighbors > 3) {
     				newState = false;
     			}
     			
-    			if(!oldState && livingNeighbors == 3) {
+    			if(livingNeighbors == 3) {
     				newState = true;
     			}
     			
