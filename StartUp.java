@@ -2,18 +2,31 @@ import java.util.Random;
 
 public class StartUp {
 
+	private static RuleSet ruleSet = RuleSet.BELOUSOV_ZHABOTINSKY_REACTION;
+	
     public static void main(String[] args) {
         // Initial setup for visualizer and grid
-        BooleanGridVisualizer visualizer = new BooleanGridVisualizer(20, 20);
+        BooleanGridVisualizer visualizer = new BooleanGridVisualizer(3, 3);
         visualizer.setVisible(true);
-        boolean[][] grid = generateRandomBooleanGrid(50, 50); // Placeholder for grid initialization
+        boolean[][] grid = generateRandomBooleanGrid(300, 300); // Placeholder for grid initialization
         visualizer.drawBooleanArray(grid);
         
-        // Main loop to continuously update the grid
-        while (true) {
-            delay(1000); // Delay for 1 second to see the evolution
-            grid = updateGrid(grid); // Update the grid based on the game's rules
-            visualizer.drawBooleanArray(grid);
+        boolean running = true;
+        
+        if(ruleSet == RuleSet.CONWAYS_GAME_OF_LIFE){
+        	visualizer.setTitle("Conway's Game of Life");
+		    while (running) {
+		        delay(10); // Delay to see the changes
+		        grid = updateGridConways(grid); // Update the grid based on the game's rules
+		        visualizer.drawBooleanArray(grid);
+		    }
+        } else if(ruleSet == RuleSet.BELOUSOV_ZHABOTINSKY_REACTION) {
+        	visualizer.setTitle("Belousov Zhabotinsky Reaction");
+        	while (running) {
+		        delay(10); // Delay to see the changes
+		        grid = updateGridBelousov(grid); // Update the grid based on the game's rules
+		        visualizer.drawBooleanArray(grid);
+		    }
         }
     }
     
@@ -23,14 +36,57 @@ public class StartUp {
      * @param grid The current state of the grid.
      * @return A two-dimensional boolean array representing the next state of the grid.
      */
-    private static boolean[][] updateGrid(boolean[][] grid) {
-        // In dieser Methode soll die Logik implementiert werden, um das Gitter gemäß den Regeln von Conways Spiel des Lebens zu aktualisieren.
-        // Jede Zelle hat 2 Zustände: lebendig (true) oder tot (false).
-        // Die Implementierung sollte den Zustand jeder Zelle im Gitter basierend auf der Anzahl ihrer lebenden Nachbarn aktualisieren.
-    	countLivingNeighbors(grid,0,0);
-        return grid; // Gibt das aktualisierte Gitter zurück
+    private static boolean[][] updateGridConways(boolean[][] grid) {
+        
+    	boolean[][] newGrid = new boolean[grid.length][grid[0].length];
+    	
+    	for(int x = 0; x < grid.length; x++) {
+    		for(int y = 0; y < grid[0].length; y++) {
+    			
+    			short livingNeighbors = countLivingNeighbors(grid, x, y); 
+    			
+    			boolean oldState = grid[x][y];
+    			boolean newState = oldState;
+    			
+    			if(oldState && (livingNeighbors < 2 || livingNeighbors > 3)) {
+    				newState = false;
+    			}
+    			
+    			if(!oldState && livingNeighbors == 3) {
+    				newState = true;
+    			}
+    			
+    			newGrid[x][y] = newState;
+    			
+    		}
+    	}
+    	
+        return newGrid;
     }
 
+    private static boolean[][] updateGridBelousov(boolean[][] grid) {
+        
+    	boolean[][] newGrid = new boolean[grid.length][grid[0].length];
+    	
+    	for(int x = 0; x < grid.length; x++) {
+    		for(int y = 0; y < grid[0].length; y++) {
+    			
+    			short livingNeighbors = countLivingNeighbors(grid, x, y); 
+    			
+    			boolean oldState = grid[x][y];
+    			boolean newState = oldState;
+    			
+    			System.out.println("TBD");
+    			
+    			newGrid[x][y] = newState;
+    			
+    		}
+    	}
+    	
+        return newGrid;
+    }
+
+    
     /**
      * Counts the living neighbors around a specific cell in the grid.
      * 
@@ -39,11 +95,46 @@ public class StartUp {
      * @param col The column index of the cell.
      * @return The number of living neighbors around the cell at [row][col].
      */
-    private static int countLivingNeighbors(boolean[][] grid, int row, int col) {
-        // Diese Methode zählt die lebenden Nachbarn einer spezifischen Zelle.
-        // Schülerinnen und Schüler sollen hier die Logik implementieren, um die Anzahl der lebenden Nachbarn zu zählen,
-        // unter Berücksichtigung der Randbedingungen des Gitters.
-        return 0; // Gibt die Anzahl der lebenden Nachbarn zurück
+    private static short countLivingNeighbors(boolean[][] grid, int row, int col) {
+    	// These variables just allow me to write less characters in the if statements
+    	int lx = grid.length - 1;
+    	int ly = grid[0].length - 1;
+    	
+    	short livingNeighbors = 0;
+    	
+    	if(row > 0) {
+    		
+    		if(col > 0 && grid[row - 1][col - 1])
+    			livingNeighbors++;
+    		
+    		if(grid[row - 1][col])
+    			livingNeighbors++;
+    		
+    		if(col < ly && grid[row - 1][col + 1])
+    			livingNeighbors++;
+    		
+    	}
+    	
+    	if(col > 0 && grid[row][col - 1])
+    		livingNeighbors++;
+    	
+    	if(col < ly && grid[row][col + 1])
+    		livingNeighbors++;
+    	
+    	if(row < lx) {
+    		
+    		if(col > 0 && grid[row + 1][col - 1])
+    			livingNeighbors++;
+    		
+    		if(grid[row + 1][col])
+    			livingNeighbors++;
+    		
+    		if(col < ly && grid[row + 1][col + 1])
+    			livingNeighbors++;
+    		
+    	}
+    	
+        return livingNeighbors;
     }
     
     /**
