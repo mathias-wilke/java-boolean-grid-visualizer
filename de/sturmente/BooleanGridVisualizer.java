@@ -1,3 +1,4 @@
+package de.sturmente;
 import javax.swing.*;
 import java.awt.*;
 

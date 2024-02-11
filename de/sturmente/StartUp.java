@@ -1,3 +1,4 @@
+package de.sturmente;
 import java.util.Random;
 
 public class StartUp {
